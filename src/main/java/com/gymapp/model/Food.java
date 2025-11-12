@@ -7,20 +7,20 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "equipment")
-public class Equipment {
+@Table(name = "foods")
+public class Food {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "equipment_id")
-    private Long equipmentId;
+    @Column(name = "food_id")
+    private Long foodId;
 
     @Column(unique = true, nullable = false)
     private String name;
 
     // --- THIS IS THE FIX ---
-    // Change 'mappedBy' to "availableEquipment"
+    // Change 'mappedBy' to "dislikedFoods"
     // Change 'Set<UserProfile> userProfiles' to 'Set<Users> users'
-    @ManyToMany(mappedBy = "availableEquipment")
+    @ManyToMany(mappedBy = "dislikedFoods")
     private Set<Users> users = new HashSet<>();
 }

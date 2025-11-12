@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List; // Make sure to import java.util.List
+import java.util.Set;
 
 @Data // Creates getters, setters, toString, equals, hashCode
 @Builder // Lets you build objects like: Users.builder().email("...").build()
@@ -78,4 +80,49 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_equipment", // The name of the join table from your SQL
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_id")
+    )
+    private Set<Equipment> availableEquipment = new HashSet<>();
+
+    // --- Many-to-Many Relationship for Allergies ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_allergies", // The name of the join table from your SQL
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "allergy_id")
+    )
+    private Set<Allergy> allergies = new HashSet<>();
+
+    // --- Many-to-Many Relationship for Medical Conditions ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_conditions", // The name of the join table from your SQL
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "condition_id")
+    )
+    private Set<MedicalCondition> medicalConditions = new HashSet<>();
+
+    // --- Many-to-Many Relationship for Disliked Foods ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_disliked_foods", // The name of the join table from your SQL
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_id")
+    )
+    private Set<Food> dislikedFoods = new HashSet<>();
+
+    // --- One-to-Many Relationship for Custom Equipment ---
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<CustomEquipment> customEquipment = new HashSet<>();
+
+    // ... your existing UserDetails methods (getAuthorities, etc.) ...
 }

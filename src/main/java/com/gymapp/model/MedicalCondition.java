@@ -12,13 +12,15 @@ public class MedicalCondition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "medical_condition_id")
+    @Column(name = "condition_id") // Your SQL uses condition_id
     private Long medicalConditionId;
 
     @Column(unique = true, nullable = false)
-    private String name; // e.g., "PCOS", "High Blood Pressure", "Knee Pain"
+    private String name;
 
-    // This links it back to the 'userProfiles' that have this condition
+    // --- THIS IS THE FIX ---
+    // Change 'mappedBy' to "medicalConditions"
+    // Change 'Set<UserProfile> userProfiles' to 'Set<Users> users'
     @ManyToMany(mappedBy = "medicalConditions")
-    private Set<UserProfile> userProfiles = new HashSet<>();
+    private Set<Users> users = new HashSet<>();
 }

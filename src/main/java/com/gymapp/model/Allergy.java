@@ -16,9 +16,11 @@ public class Allergy {
     private Long allergyId;
 
     @Column(unique = true, nullable = false)
-    private String name; // e.g., "Lactose Intolerance", "Peanuts", "Shellfish"
+    private String name;
 
-    // This links it back to the 'userProfiles' that have this allergy
+    // --- THIS IS THE FIX ---
+    // Change 'mappedBy' to "allergies" (to match the field in Users.java)
+    // Change 'Set<UserProfile> userProfiles' to 'Set<Users> users'
     @ManyToMany(mappedBy = "allergies")
-    private Set<UserProfile> userProfiles = new HashSet<>();
+    private Set<Users> users = new HashSet<>();
 }

@@ -1,7 +1,6 @@
 package com.gymapp.model;
 
 import com.gymapp.model.enums.*;
-// Import your other enums here (e.g., ActivityLevel, DietaryType)
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder
@@ -25,11 +22,6 @@ public class UserProfile {
     @Column(name = "profile_id")
     private Long profileId;
 
-    /**
-     * This is the link back to the main Users table.
-     * fetch = FetchType.LAZY means it won't load the Users object
-     * unless you explicitly ask for it, which is more efficient.
-     */
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private Users user;
@@ -39,6 +31,20 @@ public class UserProfile {
 
     @Column(name = "height_cm")
     private Double heightCm;
+
+    // --- ADD THESE 4 MISSING FIELDS ---
+    @Column(name = "weight_kg")
+    private Double weightKg; // This will fix your immediate error
+
+    @Column(name = "body_fat_percentage")
+    private Double bodyFatPercentage;
+
+    @Column(name = "meal_frequency")
+    private Integer mealFrequency;
+
+    @Column(name = "cooking_time_minutes")
+    private Integer cookingTimeMinutes;
+    // --- END OF ADDITIONS ---
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -62,42 +68,4 @@ public class UserProfile {
     @Enumerated(EnumType.STRING)
     @Column(name = "workout_location")
     private WorkoutLocation workoutLocation;
-
-    // ... (inside your UserProfile class)
-
-    /**
-     * This is for "The Tickbox" (Many-to-Many).
-     * It links to the master list of common equipment.
-     */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_profile_equipment",
-            joinColumns = @JoinColumn(name = "profile_id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id")
-    )
-    private Set<Equipment> availableEquipment = new HashSet<>();
-
-    @OneToMany(
-            mappedBy = "userProfile",
-            cascade = CascadeType.ALL, // If we delete a profile, delete their custom items
-            orphanRemoval = true
-    )
-    private Set<CustomEquipment> customEquipment = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_profile_allergies", // The name of the join table
-            joinColumns = @JoinColumn(name = "profile_id"),
-            inverseJoinColumns = @JoinColumn(name = "allergy_id")
-    )
-    private Set<Allergy> allergies = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_profile_medical_conditions", // The name of the join table
-            joinColumns = @JoinColumn(name = "profile_id"),
-            inverseJoinColumns = @JoinColumn(name = "medical_condition_id")
-    )
-    private Set<MedicalCondition> medicalConditions = new HashSet<>();
-
 }

@@ -8,6 +8,13 @@ import java.util.List;
 
 @Repository
 public interface CustomEquipmentRepository extends JpaRepository<CustomEquipment, Long> {
-    // Find all custom items for a specific profile
-    List<CustomEquipment> findByUserProfile_ProfileId(Long profileId);
+
+    // --- THIS IS THE FIX ---
+    //
+    // Old name: findByUserProfile_ProfileId(Long profileId)
+    //
+    // New name: findByUser_UserId(Long userId)
+    //
+    // This tells Spring: "Find by the 'user' object's 'userId' property."
+    List<CustomEquipment> findByUser_UserId(Long userId);
 }

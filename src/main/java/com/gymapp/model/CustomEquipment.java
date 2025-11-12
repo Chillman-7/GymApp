@@ -15,17 +15,13 @@ public class CustomEquipment {
     @Column(name = "custom_equipment_id")
     private Long customEquipmentId;
 
-    // This links it back to the UserProfile
+    // --- THIS IS THE FIX ---
+    // Change 'UserProfile userProfile' to 'Users user'
+    // Update @JoinColumn to point to "user_id"
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id")
-    private UserProfile userProfile;
+    @JoinColumn(name = "user_id")
+    private Users user;
 
-    // The custom name the user typed in
     @Column(nullable = false)
-    private String name; // e.g., "20kg Kettlebell", "TRX Straps"
-
-    public CustomEquipment(UserProfile userProfile, String name) {
-        this.userProfile = userProfile;
-        this.name = name;
-    }
+    private String name;
 }
