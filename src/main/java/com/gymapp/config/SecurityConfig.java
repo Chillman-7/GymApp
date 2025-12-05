@@ -9,9 +9,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 // 1. IMPORT THIS
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
+@CrossOrigin(origins = "*")
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
