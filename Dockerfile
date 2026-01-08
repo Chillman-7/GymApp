@@ -2,11 +2,14 @@ FROM eclipse-temurin:17-jdk
 
 WORKDIR /app
 
+# Copy source code
 COPY . .
 
-RUN chmod +x mvnw
+# Build the Spring Boot jar
 RUN ./mvnw clean package -DskipTests
 
+# Render uses PORT env variable (8080 fallback)
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/*.jar"]
+# Run the exact jar
+CMD ["java", "-jar", "target/gymapp-0.0.1-SNAPSHOT.jar"]
